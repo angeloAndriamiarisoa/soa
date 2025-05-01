@@ -1,0 +1,20 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/employeeservicesoa?sslmode=disable
+    username: postgres
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+
+  graphql:
+    graphiql:
+      enabled: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

@@ -1,0 +1,79 @@
+version: '3.9'
+
+services:
+
+  eureka:
+    build: ./eureka
+    container_name: eureka-service
+    ports:
+      - "8761:8761"
+    networks:
+      - spring-net
+
+  apigateway:
+    build: ./apigateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+    networks:
+      - spring-net
+
+  employeeservice:
+    build: ./employeeservice
+    container_name: employee-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka
+    networks:
+      - spring-net
+
+  hrservice:
+    build: ./hrservice
+    container_name: hr-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka
+    networks:
+      - spring-net
+
+  employeefileservice:
+    build: ./employeefileservice
+    container_name: employee-file-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka
+    networks:
+      - spring-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - spring-net
+
+networks:
+  spring-net:
+    driver: bridge
+
+
+# services:
+#   rabbitmq:
+#     image: rabbitmq:3-management
+#     container_name: rabbitmq
+#     ports:
+#       - "5672:5672"    # Port AMQP (communication entre applications)
+#       - "15672:15672"  # Port HTTP (interface d'administration web)
+#     environment:
+#       RABBITMQ_DEFAULT_USER: guest
+#       RABBITMQ_DEFAULT_PASS: guest

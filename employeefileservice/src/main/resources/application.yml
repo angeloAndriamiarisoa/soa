@@ -1,0 +1,19 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: employee-file-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/employeefileservicesoa?sslmode=disable
+    username: postgres
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
