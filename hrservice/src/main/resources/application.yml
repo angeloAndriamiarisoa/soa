@@ -1,17 +1,20 @@
 server:
   port: 8083
+  forward-headers-strategy: framework
 spring:
   application:
     name: hr-service
 
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${MQ_HOST:localhost}
+    port: ${MQ_PORT:5672}
+    username: ${MQ_USER:guest}
+    password: ${MQ_PASSWORD:guest}
 
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true

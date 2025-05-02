@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: api-gateway
+
+
   cloud:
     gateway:
       discovery:
@@ -11,16 +13,33 @@ spring:
           enabled: true
           lower-case-service-id: true
       # routes:
-      # - id: product-service
-      #   uri: lb://product-service
-      #   predicates:
-      #   - Path=/products/**
+      #   # Route pour GraphiQL (employee-service)
+      #   - id: employee-graphiql
+      #     uri: lb://employee-service
+      #     predicates:
+      #       - Path=/employee-service/graphiql/**
+      #     filters:
+      #       - RewritePath=/employee-service/graphiql/(?<segment>.*), /$\{segment}
 
+      #   # Route pour l'API GraphQL
+      #   - id: employee-graphql
+      #     uri: lb://employee-service
+      #     predicates:
+      #       - Path=/employee-service/graphql/**
 
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            exposedHeaders: "Content-Disposition"
 
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
-
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    # hostname: localhost # Ou "localhost" si besoin
+    preferIpAddress: true

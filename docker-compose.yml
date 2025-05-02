@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
 
   eureka:
@@ -13,6 +11,9 @@ services:
   apigateway:
     build: ./apigateway
     container_name: api-gateway
+    restart: unless-stopped 
+    environment:
+      - EUREKA_URL=http://eureka-service:8761/eureka
     ports:
       - "8080:8080"
     depends_on:
@@ -23,30 +24,97 @@ services:
   employeeservice:
     build: ./employeeservice
     container_name: employee-service
+    restart: unless-stopped 
     ports:
       - "8081:8081"
+    environment:
+      - EUREKA_URL=http://eureka-service:8761/eureka
+      - DB_URL=jdbc:postgresql://db-employee-service:5432/employeeservicesoa?sslmode=disable
     depends_on:
       - eureka
+      - dbemployeeservice
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - spring-net
+  dbemployeeservice:
+    container_name: db-employee-service
+    image: "postgres:latest"
+    environment:
+      - 'POSTGRES_DB=employeeservicesoa'
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=pass'
+    networks:
+      - spring-net
+
+
+
+  employeefileservice:
+    build: ./employeefileservice
+    container_name: employee-file-service
+    restart: unless-stopped 
+    environment:
+      - EUREKA_URL=http://eureka-service:8761/eureka
+      - DB_URL=jdbc:postgresql://db-employee-file-service:5432/employeefileservicesoa?sslmode=disable
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka
+      - dbemployeefileservice
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - spring-net
+
+
+  dbemployeefileservice:
+    container_name: db-employee-file-service
+    image: postgres:latest
+    environment:
+      - 'POSTGRES_DB=employeefileservicesoa'
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=pass'
     networks:
       - spring-net
 
   hrservice:
     build: ./hrservice
     container_name: hr-service
-    ports:
-      - "8082:8082"
-    depends_on:
-      - eureka
-    networks:
-      - spring-net
-
-  employeefileservice:
-    build: ./employeefileservice
-    container_name: employee-file-service
+    restart: unless-stopped  
+    environment:
+      - EUREKA_URL=http://eureka-service:8761/eureka
+      - MQ_HOST=rabbitmq
+      - MQ_USER=guest
+      - MQ_PASSWORD=guest
+      - MQ_PORT=5672
     ports:
       - "8083:8083"
     depends_on:
       - eureka
+      # - rabbitmq
+    networks:
+      - spring-net
+  insurancecompanyservice:
+    build: ./insurancecompany
+    container_name: insurance-company-service
+    restart: unless-stopped  
+    environment:
+      - EUREKA_URL=http://eureka-service:8761/eureka
+      - MQ_HOST=rabbitmq
+      - MQ_USER=guest
+      - MQ_PASSWORD=guest
+      - MQ_PORT=5672
+    ports:
+      - "8084:8084"
+    depends_on:
+      - eureka
+      # - rabbitmq
     networks:
       - spring-net
 
@@ -67,13 +135,12 @@ networks:
     driver: bridge
 
 
-# services:
-#   rabbitmq:
-#     image: rabbitmq:3-management
-#     container_name: rabbitmq
-#     ports:
-#       - "5672:5672"    # Port AMQP (communication entre applications)
-#       - "15672:15672"  # Port HTTP (interface d'administration web)
-#     environment:
-#       RABBITMQ_DEFAULT_USER: guest
-#       RABBITMQ_DEFAULT_PASS: guest
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   container_name: rabbitmq
+  #   ports:
+  #     - "5672:5672"    # Port AMQP (communication entre applications)
+  #     - "15672:15672"  # Port HTTP (interface d'administration web)
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest

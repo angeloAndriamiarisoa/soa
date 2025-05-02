@@ -11,7 +11,7 @@ import com.project.bpmsoa.hrservice.dto.EmployeeFileDto;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
-@FeignClient(name = "employee-file-service", url = "http://localhost:8082")
+@FeignClient(name = "employee-file-service")
 public interface EmployeeFileClient {
     @PutMapping("/employee-file/{employee}")
     EmployeeFileDto changeBeneficiary(@PathVariable String employee,

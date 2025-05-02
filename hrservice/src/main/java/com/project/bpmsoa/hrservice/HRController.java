@@ -30,13 +30,15 @@ public class HRController {
     @PutMapping("/change-benef/{number}")
     public EmployeeFileDto changeBeneficiary (@PathVariable String number,
                                     @RequestBody BeneficiaryRequestDto beneficiary) {
+        this.mqService.sendMessage("Beneficiary change for" + number
+                    + "(" +  beneficiary.toString() + ")");
         return service.changeBeneficiary(number, beneficiary);
 
     }
 
     @GetMapping("/mq")
     public String  sendNotification () {
-        this.mqService.sendMessage("hello from hr");
+        this.mqService.sendMessage("Beneficiary change");
         return "message send";
     }
 }

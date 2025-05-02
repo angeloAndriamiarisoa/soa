@@ -29,7 +29,8 @@
             "mainClass": "com.project.bpmsoa.apigateway.ApiGatewayApplication",
             "projectName": "apigateway",
             "args": "",
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=40319 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=apigateway"
         },
         {
             "type": "java",
@@ -58,6 +59,16 @@
             "cwd": "${workspaceFolder}",
             "mainClass": "com.project.bpmsoa.insurancecompany.InsuranceCompanyApplication",
             "projectName": "insurancecompany",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-EmployeeServiceApplication<employeeservice>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.project.bpmsoa.employeeservice.EmployeeServiceApplication",
+            "projectName": "employeeservice",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
