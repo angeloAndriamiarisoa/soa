@@ -12,20 +12,6 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-      # routes:
-      #   # Route pour GraphiQL (employee-service)
-      #   - id: employee-graphiql
-      #     uri: lb://employee-service
-      #     predicates:
-      #       - Path=/employee-service/graphiql/**
-      #     filters:
-      #       - RewritePath=/employee-service/graphiql/(?<segment>.*), /$\{segment}
-
-      #   # Route pour l'API GraphQL
-      #   - id: employee-graphql
-      #     uri: lb://employee-service
-      #     predicates:
-      #       - Path=/employee-service/graphql/**
 
       globalcors:
         cors-configurations:

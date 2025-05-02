@@ -1,5 +1,4 @@
 services:
-
   eureka:
     build: ./eureka
     container_name: eureka-service
@@ -133,14 +132,3 @@ services:
 networks:
   spring-net:
     driver: bridge
-
-
-  # rabbitmq:
-  #   image: rabbitmq:3-management
-  #   container_name: rabbitmq
-  #   ports:
-  #     - "5672:5672"    # Port AMQP (communication entre applications)
-  #     - "15672:15672"  # Port HTTP (interface d'administration web)
-  #   environment:
-  #     RABBITMQ_DEFAULT_USER: guest
-  #     RABBITMQ_DEFAULT_PASS: guest
